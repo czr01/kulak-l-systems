@@ -1,5 +1,9 @@
+import datetime
+
 class LSystem:
-    def __init__(self, axiom, rules, translations, angle, length):
+    def __init__(self, variables, constants, axiom, rules, translations, angle, length):
+        self.variables = variables
+        self.constants = constants
         self.axiom = axiom
         self.rules = rules
         self.translations = translations
@@ -10,7 +14,13 @@ class LSystem:
         current = self.axiom
         for _ in range(iterations):
             current = ''.join([self.rules[symbol] if symbol in self.rules else symbol for symbol in current])
+        self.store(iterations, current)
         return current
+
+    def store(self, iterations, string):
+        logging_message = f"{datetime.datetime.now()}\t{self.variables}\t{self.constants}\t{self.axiom}\t{self.rules}\t{self.translations}\t{iterations}\t{string}\n"
+        with open("history.txt",'a') as f:
+            f.write(logging_message)
 
     def draw(self, string, turtle):
         for symbol in string:

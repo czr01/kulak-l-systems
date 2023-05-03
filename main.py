@@ -6,12 +6,12 @@ import json
 from lsystem import LSystem
 from exceptions import *
 
-def main():  
+def main():
     filename, iterations = get_input()
     
     lsystem = parse(filename)
 
-    lsys_string = lsystem.process(5)
+    lsys_string = lsystem.process(iterations)
     print(lsys_string)
 
     turtle = Turtle()
@@ -20,12 +20,11 @@ def main():
 def get_input():
     try:
         filename = input("Name of file containing l-system: ")
+        iterations = int(input("Number of iterations: "))
         if not os.path.exists(filename): 
             raise FileNotFoundError(f"No such file: {filename}")
         if not filename.endswith(".json"): 
             raise JSONFileRequiredError("Input file must be '.json'")
-
-        iterations = int(input("Number of iterations: "))
         if iterations < 0:
             raise NegativeIterationsError("Number of iterations can't be negative")
         
@@ -39,7 +38,15 @@ def parse(filename):
     try:
         with open(filename,'r') as f:
             data = json.load(f)
-            return LSystem(data["axiom"], data["rules"], data["translations"], int(data["angle"]), int(data["length"]))
+            return LSystem(
+                variables = data["variables"],
+                constants = data["constants"],
+                axiom = data["axiom"],
+                rules = data["rules"],
+                translations = data["translations"],
+                angle = int(data["angle"]),
+                length = int(data["length"]) 
+            )
         
     except json.decoder.JSONDecodeError as jde:
         print(f"Invalid JSON. {jde}")
