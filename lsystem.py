@@ -18,7 +18,7 @@ class LSystem:
         return current
 
     def store(self, iterations, string):
-        logging_message = f"{datetime.datetime.now()}\t{self.variables}\t{self.constants}\t{self.axiom}\t{self.rules}\t{self.translations}\t{iterations}\t{string}\n"
+        logging_message = f"{datetime.datetime.now()}\t{', '.join(self.variables)}\t{', '.join(self.constants)}\t{self.axiom}\t{', '.join([f'{key} -> {value}' for key, value in self.rules.items()])}\t{', '.join([f'{key} : {value}' for key, value in self.translations.items()])}\t{iterations}\t{string}\n"
         with open("history.txt",'a') as f:
             f.write(logging_message)
 
