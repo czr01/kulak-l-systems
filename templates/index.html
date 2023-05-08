@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Webpage</title>
+    <style>
+        table {
+            width: 100%;
+        }
+        th, td {
+            text-align: left;
+            border: 1px solid black;
+        }
+    </style>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+        let result = "{{ result }}";
+        let translations = "{{ translations }}";
+    </script>
+  </head>
+  <body>
+    <h1>My L-System Webpage</h1>
+    <h3>Most recently processed L-System:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Variables</th>
+                <th>Constants</th>
+                <th>Axiom</th>
+                <th>Rules</th>
+                <th>Translations</th>
+                <th>Iterations</th>
+                <th>Resulting String</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for field in recent_lsystem.split("\t") %}
+                    <td>{{field}}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    <svg></svg>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
