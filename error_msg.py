@@ -12,7 +12,5 @@ vars_const_intersection = "Variables and constants share common symbol(s)."
 
 missing_draw_fields = "Missing required L-System configuration field(s) for drawing."
 invalid_translations_type = "L-System typing of translations in configuration file invalid. Expected 'dict' with 'string' pairs."
-invalid_length_value = "L-System configuration file invalid length value. Expected numeric value."
-invalid_angle_value = "L-System configuration file invalid angle value. Expected numeric value."
 translations_false_one_to_one_correspondence_with_vars_and_consts = "Translation symbols must have one-to-one correspondence with defined variables and defined constants"
 unsupported_translations = "L-System includes unsupported translation."

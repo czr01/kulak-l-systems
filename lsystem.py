@@ -1,6 +1,8 @@
 import datetime
 import random
+import re
 
+from drawingstate import DrawingState
 import error_msg
 from lsystem_exceptions import *
 
@@ -8,8 +10,8 @@ class LSystem:
     def __init__(self, data):
         self.data = data
         self.baseconfig_keys = ["variables","constants","axiom","rules"]
-        self.drawconfig_keys = ["translations","angle","length"]
-        self.supported_translations = ["forward","draw","angle","-angle","nop"]
+        self.drawconfig_key = "translations"
+        self.stack = []
 
         self.configure()
 
@@ -20,9 +22,9 @@ class LSystem:
         self.alphabet = set(self.variables).union(set(self.constants))
 
         # Drawing
-        if any(entry in self.data for entry in self.drawconfig_keys):
+        if self.drawconfig_key in self.data:
             self.validate_drawconfig()
-            self.set_attributes({key: self.data[key] for key in self.drawconfig_keys})
+            self.set_attributes({self.drawconfig_key : self.data[self.drawconfig_key]})
 
         self.data = None
 
@@ -82,36 +84,51 @@ class LSystem:
 
         if not set(variables).isdisjoint(constants):
             raise VariableConstantOverlapError(error_msg.vars_const_intersection)
-    
-    def validate_drawconfig(self):
-        if not all(entry in self.data for entry in self.drawconfig_keys):
-            raise KeyError(error_msg.missing_draw_fields)
 
-        translations = self.data.get("translations")
-        angle = self.data.get("angle")
-        length = self.data.get("length")
+    def validate_drawconfig(self):
+        translations = self.data.get(self.drawconfig_key)
 
         if not (isinstance(translations, dict) and all((isinstance(key, str) and isinstance(value, str)) for key, value in translations.items())):
             raise TypeError(error_msg.invalid_translations_type)
         
-        if not (isinstance(length, int) or (isinstance(length, str) and length.isnumeric())):
-            raise TypeError(error_msg.invalid_length_value)
-        
-        if not (isinstance(angle, int) or (isinstance(angle, str) and angle.isnumeric())):
-            raise TypeError(error_msg.invalid_angle_value)
+        for operation in translations.values():
+            if operation in ["nop","push","pop"]:
+                continue
+            
+            parameters = operation.split(" ")[1:]
+            operation = operation.split(" ")[0]
+
+            if operation in ["angle","forward","draw"]:
+                if not (len(parameters) == 1 and self.is_numeric(parameters[0])):
+                    raise UnsupportedTranslationError(error_msg.unsupported_translations)
+            elif operation == "color":
+                if not ((len(parameters) == 1 and self.is_color(parameters[0])) or (len(parameters) == 3 and self.is_color(parameters[-3:]))):
+                    raise UnsupportedTranslationError
+            else:
+                raise UnsupportedTranslationError(error_msg.unsupported_translations)
         
         if set(translations.keys()) != set(self.alphabet):
             raise TranslationSymbolMismatchError(error_msg.translations_false_one_to_one_correspondence_with_vars_and_consts)
+    
+    def is_numeric(self, string):
+        try:
+            float(string)
+            return True
+        except ValueError:
+            return False
 
-        if not set(translations.values()).issubset(set(self.supported_translations)):
-            raise UnsupportedTranslationError(error_msg.unsupported_translations)
-        
+    def is_color(self, color):
+        if isinstance(color, str):
+            colors_str = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "black", "gray", "white"]
+            hexadec_pattern = r"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+            return (color in colors_str or bool(re.match(hexadec_pattern, color))) 
+        elif isinstance(color, list):
+            return all((self.is_numeric(value) and 0 <= int(value) <= 255) for value in color)
+        return False
+
     def set_attributes(self, data):
         for key, value in data.items():
-            if isinstance(value, str) and value.isnumeric():
-                setattr(self, key, int(value))
-            else:
-                setattr(self, key, value)
+            setattr(self, key, value)
 
     def process(self, iterations):
         current = self.axiom
@@ -139,25 +156,44 @@ class LSystem:
         except AttributeError:
             pass # Alternate logging message
 
-    def draw(self, string, turtle):
-        try:
+    def draw(self, turtle, parameter):
+        turtle.forward(float(parameter))
+
+    def forward(self, turtle, parameter):
+        turtle.penup()
+        turtle.forward(float(parameter))
+        turtle.pendown()
+
+    def angle(self, turtle, parameter):
+        turtle.right(float(parameter))
+
+    def color(self, turtle, parameter):
+        if " " in parameter:
+            turtle.pencolor(*[int(x)/255 for x in parameter.split(" ")])
+        else:
+            turtle.pencolor(parameter)
+
+    def push(self, turtle, _):
+        self.stack.append(DrawingState(x=turtle.xcor(), y=turtle.ycor(), angle=turtle.heading()))
+
+    def pop(self, turtle, _):
+        drawing_state = self.stack.pop()
+        turtle.penup()
+        turtle.setpos(drawing_state.x, drawing_state.y)
+        turtle.setheading(drawing_state.angle)
+        turtle.pendown()
+
+    def nop(*args):
+        pass
+
+    def render(self, string, turtle):
+        if hasattr(self, self.drawconfig_key):
             for symbol in string:
-                if symbol in self.translations:
-                    operation = self.translations[symbol]
-                    if operation == "draw":
-                        turtle.forward(self.length)                
-
-                    elif operation == "forward":
-                        turtle.forward(self.length)
-                        turtle.draw()
-
-                    elif operation == "angle":
-                        turtle.right(self.angle)
-
-                    elif operation == "-angle":
-                        turtle.right(-self.angle)
-
-                    elif operation == "nop":
-                        pass
-        except AttributeError:
-            print("LSystem is not drawable")
+                operation = self.translations[symbol]
+                if " " in operation:
+                    parameter = operation.split(" ", 1)[1]
+                    operation =  operation.split(" ")[0]
+                method = getattr(self, operation)
+                method(turtle, parameter)
+        else:
+            raise AttributeError("LSystem is not drawable. Define 'translations' in configuration file.")

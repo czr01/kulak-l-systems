@@ -1,5 +1,8 @@
-from turtle import Turtle
+from turtle import Turtle, Screen
+import sys
 import json
+import io
+from PIL import Image
 
 from lsystem import LSystem
 
@@ -10,6 +13,13 @@ class JSONFileRequiredError(ValueError):
 
 def main():
     try:
+        if len(sys.argv) == 1:
+            export_filename = None
+        elif len(sys.argv) == 3 and sys.argv[1] == '--export':
+            export_filename = sys.argv[2]
+        else:
+            print('Usage: python3 <python-main-file.py> [--export <filename>]')
+        
         filename = input("Name of file containing l-system description: ")
         with open(filename,'r') as f:
             if not filename.endswith(".json"):
@@ -20,9 +30,15 @@ def main():
         lsys_string = lsystem.process(iterations)
         print(lsys_string)
         turtle = Turtle()
-        lsystem.draw(lsys_string, turtle)
+        turtle.width(3)
+        screen = Screen()
+        lsystem.render(lsys_string, turtle)
+        if export_filename:
+            screenshot = screen.getcanvas().postscript()
+            image = Image.open(io.BytesIO(screenshot.encode('utf-8')))
+            image.save(export_filename)
 
-    except Exception as e:
+    except KeyError as e:
         print(e)
 
 if __name__ == "__main__":

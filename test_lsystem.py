@@ -14,11 +14,9 @@ def gen_config():
             "F"  : "F+F"
         },
         "translations" : {
-            "F" : "draw",
-            "+" : "angle"
-        },
-        "angle" : 90,
-        "length" : 50
+            "F" : "draw 10",
+            "+" : "angle 90"
+        }
     }
 
 def get_undefined_char(lst):
@@ -29,11 +27,6 @@ def get_undefined_char(lst):
 def test_missing_required_field(gen_config):
     with pytest.raises(KeyError):
         del gen_config["axiom"]
-        LSystem(gen_config)
-
-def test_incomplete_drawing_fields(gen_config):
-    with pytest.raises(KeyError):
-        del gen_config["translations"]
         LSystem(gen_config)
 
 def test_invalid_variables_format(gen_config):
@@ -63,26 +56,6 @@ def test_invalid_translations_format(gen_config):
     with pytest.raises(TypeError):
         gen_config["translations"] = 13
         LSystem(gen_config)
-
-def test_invalid_length_format(gen_config):
-    with pytest.raises(TypeError):
-        gen_config["length"] = "banana"
-        LSystem(gen_config)
-
-def test_invalid_angle_format(gen_config):
-    with pytest.raises(TypeError):
-        gen_config["angle"] = "twentyone"
-        LSystem(gen_config)
-
-def test_proper_length_casting(gen_config):
-    gen_config["length"] = "100"
-    my_lsys = LSystem(gen_config)
-    assert my_lsys.length == 100
-
-def test_proper_angle_casting(gen_config):
-    gen_config["angle"] = "53"
-    my_lsys = LSystem(gen_config)
-    assert my_lsys.angle == 53
 
 def test_string_processing():
     my_lsys = LSystem(

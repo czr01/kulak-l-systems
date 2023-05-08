@@ -14,11 +14,9 @@ def general_lsys():
                 "F"  : "F+F"
             },
             "translations" : {
-                "F" : "draw",
-                "+" : "angle"
-            },
-            "angle" : 90,
-            "length" : 50
+                "F" : "draw 10",
+                "+" : "angle 90"
+            }
         }
     )
     return my_lsys
@@ -36,7 +34,7 @@ output_format = r"[^,]+"
 
 def validify_entry_format(entry):
     valid_format = re.compile(f"({date_format})\t({var_format})\t({const_format})\t({axiom_format})\t({rules_format})\t({translations_format})\t({iterations_format})\t({output_format})\n")
-    return valid_format.fullmatch(entry)
+    return bool(valid_format.fullmatch(entry))
 
 def test_number_of_fields(general_lsys):
     general_lsys.process(3)
