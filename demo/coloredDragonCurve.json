@@ -1,0 +1,19 @@
+{
+    "variables" : ["F","G"],
+    "constants" : ["+","-","O","P","B"],
+    "axiom" : "F",
+    "rules" : {
+        "F" : "OF+BBG",
+        "G" : "PF-POG"
+    },
+    "translations" : {
+        "F" : "draw 20",
+        "G" : "draw 20",
+        "+" : "angle 90",
+        "-" : "angle -90",
+        "O" : "color orange",
+        "P" : "color #A233FF",
+        "B" : "color 0 0 255"
+    },
+    "width" : 5
+}

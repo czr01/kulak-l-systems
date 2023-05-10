@@ -1,0 +1,15 @@
+{
+    "variables" : ["F","G"],
+    "constants" : ["+","-"],
+    "axiom" : "F",
+    "rules" : {
+        "F" : "F+G",
+        "G" : "F-G"
+    },
+    "translations" : {
+        "F" : "draw 20",
+        "G" : "draw 20",
+        "+" : "angle 90",
+        "-" : "angle -90"
+    }
+}
