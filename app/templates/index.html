@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Webpage</title>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+        let iteratedString = "{{ recent_lsystem.resulting_string }}";
+        let translations = "{{ recent_lsystem.translations }}";
+    </script>
+  </head>
+  <body>
+    <h1>My L-System Webpage</h1>
+    <h3>Most recently processed L-System:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Variables</th>
+                <th>Constants</th>
+                <th>Axiom</th>
+                <th>Rules</th>
+                <th>Translations</th>
+                <th>Iterations</th>
+                <th>Resulting String</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{recent_lsystem.timestamp}}</td>
+                <td>{{recent_lsystem.variables}}</td>
+                <td>{{recent_lsystem.constants}}</td>
+                <td>{{recent_lsystem.axiom}}</td>
+                <td>{{recent_lsystem.rules}}</td>
+                <td>{{recent_lsystem.translations}}</td>
+                <td>{{recent_lsystem.iterations}}</td>
+                <td>{{recent_lsystem.resulting_string}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="container">
+        <svg></svg>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
