@@ -300,16 +300,6 @@ def test_overlapping_variables_and_constants(lsystem_data):
         lsystem_data["constants"] += lsystem_data["variables"] 
         LSystem(lsystem_data)
 
-def test_render_non_drawable_system_translations(lsystem_data):
-    """
-    Test that calling .render method on L-System with no translations defined raises AttributeError.
-    """
-    del lsystem_data["translations"]
-    lsys = LSystem(lsystem_data)
-    iterated_string = lsys.process(2)
-    with pytest.raises(AttributeError):
-        lsys.render(iterated_string, Turtle())
-
 def test_render_with_invalid_turtle(lsystem_data):
     """
     Test that calling .render() method on L-System without passing proper Turtle() object as argument raises ValueError.
@@ -319,15 +309,6 @@ def test_render_with_invalid_turtle(lsystem_data):
     with pytest.raises(ValueError):
         lsys.render(iterated_string, "z")
 
-def test_render_with_invalid_instructions_string(lsystem_data):
-    """
-    Test that calling .render() method on L-System without passing valid iterated string as argument raises ValueError.
-    Iterated string must be interpretable by L-System defined translations and so must be subset of L-System alphabet.
-    """
-    lsys = LSystem(lsystem_data)
-    with pytest.raises(ValueError):
-        lsys.render(undefined_symb(lsystem_data), Turtle())
-
 def test_invalid_process_iterations(lsystem_data):
     """
     Test that calling .process() method without passing proper iterations argument raises ValueError.
@@ -336,3 +317,29 @@ def test_invalid_process_iterations(lsystem_data):
     lsys = LSystem(lsystem_data)
     with pytest.raises(ValueError):
         lsys.process(-19)
+
+# Tests below include the Turtle graphics module, which rely on a graphical user interface
+# and thus won't work with CI pipeline test environment which do not have access to a graphical
+# interface. Instead the turtle argument will me mocked. This only works because validity of 
+# turtle parameter is last condition to be checked.
+
+def test_render_non_drawable_system_translations(lsystem_data):
+    """
+    Test that calling .render method on L-System with no translations defined raises AttributeError.
+    """
+    del lsystem_data["translations"]
+    lsys = LSystem(lsystem_data)
+    iterated_string = lsys.process(2)
+    with pytest.raises(AttributeError):
+        lsys.render(iterated_string, "Turtle()")
+
+
+
+def test_render_with_invalid_instructions_string(lsystem_data):
+    """
+    Test that calling .render() method on L-System without passing valid iterated string as argument raises ValueError.
+    Iterated string must be interpretable by L-System defined translations and so must be subset of L-System alphabet.
+    """
+    lsys = LSystem(lsystem_data)
+    with pytest.raises(ValueError):
+        lsys.render(undefined_symb(lsystem_data), "Turtle()")
