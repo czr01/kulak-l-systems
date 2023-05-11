@@ -24,7 +24,7 @@ def process_lsystem():
 
 app_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../app/'))
 history_file = os.path.join(app_dir, 'history.txt')
-print(history_file)
+
 date_format = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}"
 var_format = r"[^,]{1}|(([^,]{1}, )+[^,]{1})"
 const_format = r"[^,]{1}|(([^,]{1}, )+[^,]{1})|"
