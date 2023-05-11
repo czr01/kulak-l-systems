@@ -78,7 +78,7 @@ Example of the L-System configuration describing the Koch Curve.
 
 ### Additional Notes
 
-- The ```color``` translation supports color names (red, orange, ...) as well as RGB-values (```color 112 255 13```) and hexadecimal color values (```color #daca00```).
+- The ```color``` translation supports most color names (red, orange, ...) as well as RGB-values (```color 112 255 13```) and hexadecimal color values (```color #daca00```).
 - The ```width``` attribute is optional. If left undefined in the L-System configuration file, it defaults to 1.
 - The ```demo/``` folder includes multiple popular L-Systems for experimentation.
 
