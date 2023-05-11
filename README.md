@@ -84,7 +84,7 @@ Example of the L-System configuration describing the Koch Curve.
 
 ## Docker Notes
 
-If docker is installed you can build an image and run this as a container.
+If docker is installed you can build an image and run the webapp as a container.
 
 ```
 docker build -t mylsys-app .
