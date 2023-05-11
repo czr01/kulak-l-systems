@@ -87,13 +87,13 @@ Example of the L-System configuration describing the Koch Curve.
 If docker is installed you can build an image and run this as a container.
 
 ```
-docker build -t mylsystems-image .
+docker build -t mylsys-app .
 ```
 
 Once the image is built, the app can be run by running the following:
 
 ```
-docker run -p 5000:5000 mylsystems-image
+docker run -p 5000:5000 mylsys-app
 ```
 
 ## Backup Script Notes

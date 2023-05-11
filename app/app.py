@@ -10,3 +10,6 @@ def index():
         recent_lsystem = {k: v for k, v in zip(lsystem_fields, recent_lsystem)}
 
     return render_template("index.html", recent_lsystem=recent_lsystem)
+
+if __name__ == "__main__":
+    app.run()
