@@ -38,7 +38,7 @@ def main():
     if len(sys.argv) == 3 and sys.argv[1] == '--export':
         export_filename = sys.argv[2]
     elif len(sys.argv) != 1:
-        print('Usage: python3 <python-main-file.py> [--export <filename>]')
+        print('Usage: python3 lsystems [--export <filename>]')
         return
 
     # Load L-System data from file
