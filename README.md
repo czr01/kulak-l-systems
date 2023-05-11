@@ -5,13 +5,13 @@
 ## Installation
 
 ```console
-# clone the repo
+# Clone the repo
 $ git clone https://github.com/czr01/kulak-l-systems.git
 
-# change the working directory
+# Change the working directory
 $ cd kulak-l-systems
 
-# install the requirements
+# Install the requirements
 $ python3 -m pip install -r requirements.txt
 ```
 
@@ -94,4 +94,32 @@ Once the image is built, the app can be run by running the following:
 
 ```
 docker run -p 5000:5000 mylsystems-image
+```
+
+## Backup Script Notes
+
+To configure your system to run the backup script on an hourly basis, run the following:
+
+```console
+
+# Navigate into scripts folder
+$ cd scripts/
+
+# Path to working directory
+$ pwd
+
+```
+
+Copy the output and run:
+
+```console
+
+$ crontab -e
+
+```
+
+Add the backup script as a cronjob like this:
+
+```console
+* */1 * * * bash {copied-path}/backup-script.sh
 ```
