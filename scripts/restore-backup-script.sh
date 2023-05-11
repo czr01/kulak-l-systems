@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# Change current directory to parent directory
 cd "$(dirname "$0")/.."
 
-HISTORY_FILE="app/history.txt"
+# Set backup directory path
 BACKUP_DIR=~/.l-systems/
+# Set file path of history file
+HISTORY_FILE="app/history.txt"
 
 if [ ! -d "$BACKUP_DIR" ]; then
   echo "Backup directory not found."
