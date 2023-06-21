@@ -1,4 +1,4 @@
-# L-Systems
+# PyLRender
 
 **Python application for processing and rendering L-Systems.**
 
