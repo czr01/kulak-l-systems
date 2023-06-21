@@ -7,38 +7,10 @@ from turtle import Turtle
 from drawingstate import DrawingState
 from error import *
 
-class LSysConfigError(Exception):
-    pass
-
-class NoVariablesDefinedError(LSysConfigError):
-    pass
-
-class FixedAxiomError(LSysConfigError):
-    pass
-
-class VariableConstantOverlapError(LSysConfigError):
-    pass
-
-class AxiomWithUndefinedSymbolErrror(LSysConfigError):
-    pass
-
-class RulesVariablesMismatchError(LSysConfigError):
-    pass
-
-class UndefinedSymbolInRuleOutputError(LSysConfigError):
-    pass
-
-class TranslationAlphabetMismatchError(LSysConfigError):
-    pass
-
-class UnsupportedTranslationError(LSysConfigError):
-    pass
-
 """
     A class representing an L-System.
 """
 class LSystem:
-
     app_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../app'))
     history_file = os.path.join(app_dir, 'history.txt')
 
@@ -358,3 +330,30 @@ class LSystem:
         Do nothing.
         """
         pass
+
+class LSysConfigError(Exception):
+    pass
+
+class NoVariablesDefinedError(LSysConfigError):
+    pass
+
+class FixedAxiomError(LSysConfigError):
+    pass
+
+class VariableConstantOverlapError(LSysConfigError):
+    pass
+
+class AxiomWithUndefinedSymbolErrror(LSysConfigError):
+    pass
+
+class RulesVariablesMismatchError(LSysConfigError):
+    pass
+
+class UndefinedSymbolInRuleOutputError(LSysConfigError):
+    pass
+
+class TranslationAlphabetMismatchError(LSysConfigError):
+    pass
+
+class UnsupportedTranslationError(LSysConfigError):
+    pass

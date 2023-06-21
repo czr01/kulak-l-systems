@@ -1,7 +1,7 @@
 import pytest
 import string
 
-from lsystems.lsystem import *
+from pylrender.lsystem import *
 
 @pytest.fixture
 def lsystem_data():

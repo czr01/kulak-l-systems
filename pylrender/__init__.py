@@ -1,4 +1,4 @@
-""" L-Systems Module
+""" PyLRender Module
 
 This module contains the main logic for processing and rendering L-Systems.
 

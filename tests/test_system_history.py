@@ -2,7 +2,7 @@ import pytest
 import re
 import os
 
-from lsystems.lsystem import LSystem
+from pylrender.lsystem import LSystem
 
 @pytest.fixture
 def process_lsystem():

@@ -51,7 +51,6 @@ def main():
     # Process L-System
     lsystem = LSystem(lsystem_data)
     lsys_string = lsystem.process(iterations)
-    print(lsys_string)
     
     # Render L-System using Turtle graphics
     turtle = Turtle()
