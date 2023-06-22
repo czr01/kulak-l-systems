@@ -7,17 +7,15 @@ from pylrender.lsystem import LSystem
 @pytest.fixture
 def process_lsystem():
     lsys = LSystem(
-        {
-            "variables" : ["F"],
-            "constants" : ["+"],
-            "axiom" : "F",
-            "rules" : {
-                "F"  : "F+F"
-            },
-            "translations" : {
-                "F" : "draw 10",
-                "+" : "angle 90"
-            }
+        variables = ["F"],
+        constants = ["+"],
+        axiom = "F",
+        rules = {
+            "F" : "F+F"
+        },
+        translations = {
+            "F" : "draw 10",
+            "+" : "angle 90"
         }
     )
     return lsys.process(3)
@@ -70,7 +68,18 @@ def test_number_of_entries(process_lsystem):
     """
     with open(history_file, 'r') as f:
         number_of_entries_before = len(f.readlines())
-    basic_lsys = LSystem({"variables":["F"],"constants":[],"axiom":"F","rules":{"F":"FF"},"translations":{"F":"draw 10"}})
+    basic_lsys = LSystem(
+        variables = ["F"],
+        constants = ["+"],
+        axiom = "F",
+        rules = {
+            "F" : "F+F"
+        },
+        translations = {
+            "F" : "draw 10",
+            "+" : "angle 90"
+        }
+    )
     basic_lsys.process(1)
     basic_lsys.process(1)
     with open(history_file, 'r') as f:
