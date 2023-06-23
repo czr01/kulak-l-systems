@@ -5,7 +5,7 @@ import os
 
 import pytest
 
-from pylrender.main import *
+from PyLRender.pylrender import *
 
 def get_lsys_description(
         variables = ["F","G"],
@@ -79,13 +79,13 @@ class TestLSystemParser:
     @staticmethod
     def test_undefined_width(setup_file):
         """
-        Test that undefined L-System width value defaults to default_width.
+        Test that undefined L-System width value defaults to DEFAULT_WIDTH.
         """
         data = get_lsys_description()
         del data["width"]
         file = setup_file(data)
         lsys = LSysConfigFileParser.parse(file)
-        assert lsys.width == LSysConfigFileParser.default_width
+        assert lsys.width == DEFAULT_WIDTH
 
     @staticmethod
     def test_empty_variable_list(setup_file):
@@ -199,7 +199,7 @@ class TestLSystem:
         lsys = LSystem(variables=["A","B"], constants=[], axiom="A", rules={"A":"AB","B":"A"}, translations={"A":"draw 10", "B":"forward 10"})
         iterated_string = lsys.process(2)
         with pytest.raises(ValueError):
-            lsys.render(iterated_string, "not_real_turtle")
+            LSystemRenderer(lsys, "not_real_turtle").render(iterated_string)
 
     # Tests below include the Turtle graphics module, which rely on a graphical user interface
     # and thus won't work with CI pipeline test environment. Instead the turtle argument will me
@@ -213,7 +213,7 @@ class TestLSystem:
         """
         lsys = LSystem(variables=["A","B"], constants=[], axiom="A", rules={"A":"AB","B":"A"}, translations={"A":"draw 10", "B":"forward 10"})
         with pytest.raises(ValueError):
-            lsys.render("Q", "Turtle()")
+            LSystemRenderer(lsys, "Turtle()").render("Q")
     
     @staticmethod
     def test_render_non_drawable_system_translations():
@@ -223,4 +223,4 @@ class TestLSystem:
         lsys = LSystem(variables=["A","B"], constants=[], axiom="A", rules={"A":"AB","B":"A"})
         iterated_string = lsys.process(2)
         with pytest.raises(AttributeError):
-            lsys.render(iterated_string, "Turtle()")
+            LSystemRenderer(lsys, "Turtle()").render(iterated_string)

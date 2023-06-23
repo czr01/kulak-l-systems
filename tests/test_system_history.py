@@ -1,27 +1,7 @@
 import pytest
 import re
-import os
 
-from pylrender.lsystem import LSystem
-
-@pytest.fixture
-def process_lsystem():
-    lsys = LSystem(
-        variables = ["F"],
-        constants = ["+"],
-        axiom = "F",
-        rules = {
-            "F" : "F+F"
-        },
-        translations = {
-            "F" : "draw 10",
-            "+" : "angle 90"
-        }
-    )
-    return lsys.process(3)
-
-app_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../app/'))
-history_file = os.path.join(app_dir, 'history.txt')
+from PyLRender.pylrender import *
 
 date_format = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}"
 var_format = r"[^,]{1}|(([^,]{1}, )+[^,]{1})"
@@ -36,52 +16,49 @@ def validify_entry_format(entry):
     valid_format = re.compile(f"({date_format})\t({var_format})\t({const_format})\t({axiom_format})\t({rules_format})\t({translations_format})\t({iterations_format})\t({output_format})\n")
     return bool(valid_format.fullmatch(entry))
 
-# Test Suite
+@pytest.fixture
+def setup():
+    lsys = LSystem(variables = ["F"], constants = ["+"], axiom = "F", rules = {"F" : "F+F"}, translations = {"F" : "draw 10", "+" : "angle 90"}) 
+    with open(HISTORY_PATH, 'r') as f:
+        lsys_hist = f.readlines()
 
-def test_number_of_fields(process_lsystem):
+    return lsys, lsys_hist
+
+def test_number_of_fields(setup):
     """
     Test that latest logged L-System entry contains the expected number of fields. 
     """
-    with open(history_file,'r') as f:
-        number_of_fields = len(f.readlines()[-1].split("\t"))
-        assert number_of_fields == 8
+    lsys, lsys_hist = setup
+    lsys.process(1)
+    number_of_fields = len(lsys_hist[-1].split("\t"))
+    assert number_of_fields == 8
 
-def test_valid_entry_format(process_lsystem):
+def test_valid_entry_format(setup):
     """
     Test that the latest logged L-System entry is in the expected format.
     """
-    with open(history_file,'r') as f:
-        latest_entry = f.readlines()[-1]
-        assert validify_entry_format(latest_entry)
+    lsys, lsys_hist = setup
+    lsys.process(1)
+    latest_entry = lsys_hist[-1]
+    assert validify_entry_format(latest_entry)
 
-def test_result_field_match_lsys_string(process_lsystem):
+def test_result_field_match_lsys_string(setup):
     """
     Test that the logged L-System result matches the expected L-System string.
     """
-    with open(history_file,'r') as f:
-        logged_result_string = f.readlines()[-1].split("\t")[-1][:-1] 
-        assert process_lsystem == logged_result_string
+    lsys, lsys_hist = setup
+    result_string = lsys.process(1)
+    logged_result_string = lsys_hist[-1].split("\t")[-1][:-1] 
+    assert result_string == logged_result_string
 
-def test_number_of_entries(process_lsystem):
+def test_number_of_entries(setup):
     """
     Test that the history file contains the expected number of entries.
     """
-    with open(history_file, 'r') as f:
-        number_of_entries_before = len(f.readlines())
-    basic_lsys = LSystem(
-        variables = ["F"],
-        constants = ["+"],
-        axiom = "F",
-        rules = {
-            "F" : "F+F"
-        },
-        translations = {
-            "F" : "draw 10",
-            "+" : "angle 90"
-        }
-    )
-    basic_lsys.process(1)
-    basic_lsys.process(1)
-    with open(history_file, 'r') as f:
+    lsys, lsys_hist = setup
+    number_of_entries_before = len(lsys_hist)
+    lsys.process(1)
+    lsys.process(1)
+    with open(HISTORY_PATH, 'r') as f:
         number_of_entries_after = len(f.readlines()) 
-        assert number_of_entries_after == number_of_entries_before + 2
+    assert number_of_entries_after == number_of_entries_before + 2

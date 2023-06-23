@@ -14,19 +14,13 @@ def is_pos_int(n):
     except ValueError:
         return False
 
-def is_color(color):
-    colors_str = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "black", "gray", "white"]
-    hexadec_pattern = r"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
-
-    # String
-    if color in colors_str:
+def is_color(color, supported_colour_strings):
+    if color in supported_colour_strings:
         return True
     
-    # Hexadecimal
-    if bool(re.match(hexadec_pattern, color)):
+    if bool(re.match(r"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", color)):
         return True
     
-    # RGB
     if len(color.split(" ")) == 3:
         if all((is_numeric(value) and 0 <= int(value) <= 255) for value in color.split(" ")):
             return True
