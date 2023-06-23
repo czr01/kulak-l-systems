@@ -1,8 +1,7 @@
 """
 """
 import sys
-import os
-from os.path import dirname
+from os.path import dirname, abspath
 
-d = os.path.join(dirname(__file__), "../PyLRender")
+d = (dirname(__file__)) + "/../PyLRender"
 sys.path.append(d)
