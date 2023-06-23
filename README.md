@@ -87,13 +87,13 @@ Example of the L-System configuration describing the Koch Curve.
 If docker is installed you can build an image and run the webapp as a container.
 
 ```
-docker build -t mylsys-app .
+docker build -t my-pylrender-app .
 ```
 
 Once the image is built, the app can be run by running the following:
 
 ```
-docker run -p 5000:5000 mylsys-app
+docker run -p 5000:5000 my-pylrender-app
 ```
 
 ## Backup Script Notes
