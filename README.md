@@ -6,10 +6,10 @@
 
 ```console
 # Clone the repo
-$ git clone https://github.com/czr01/kulak-l-systems.git
+$ git clone https://github.com/czr01/PyLRender.git
 
 # Change the working directory
-$ cd kulak-l-systems
+$ cd PyLRender
 
 # Install the requirements
 $ python3 -m pip install -r requirements.txt
@@ -18,7 +18,7 @@ $ python3 -m pip install -r requirements.txt
 ## Usage
 
 ```console
-python3 lsystems [--export <filename>]
+python3 pylrender [--export <filename>]
 ```
 
 ## L-System Configuration
