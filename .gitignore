@@ -1,3 +1,10 @@
+# env
 env/
+
+# python
 __pycache__/
+
+# application
+*.jpg
+*.png
 app/history.txt
