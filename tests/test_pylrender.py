@@ -6,7 +6,7 @@ from copy import deepcopy
 
 import pytest
 
-from PyLRender.pylrender import *
+from pylrender.pylrender import *
 
 def get_lsys_description(
         variables = ["F","G"],
